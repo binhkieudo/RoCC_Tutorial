@@ -23,7 +23,7 @@ usage() {
 
 function setup_tut1
 {
-    tmp=$(grep "rocc_simple" $TMPFILE)
+    tmp=$(grep "tut_1" $TMPFILE)
     if [ "$tmp" == "" ]; then
         awk 'NR==1,/sha3/{sub(/sha3/, "sha3,\n\t\ttut_1")} 1' $TMPFILE> ./tmp.sbt
         cat ./simple-example/script >> ./tmp.sbt
