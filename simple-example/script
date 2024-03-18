@@ -1,4 +1,3 @@
-
 lazy val tut_1 = (project in file("generators/RoCC_Tutorial/simple-example"))
   .dependsOn(rocketchip)
   .settings(libraryDependencies ++= rocketLibDeps.value)
