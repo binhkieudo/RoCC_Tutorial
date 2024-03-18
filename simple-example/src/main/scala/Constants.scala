@@ -1,4 +1,4 @@
-package myrocc
+package tut_1
 
 import chisel3._
 import freechips.rocketchip.tile.OpcodeSet
@@ -12,6 +12,6 @@ object OpcodeSet {
 }
 
 object ISA {
-  val READ  = "b0001011".U(7.W)
-  val WRITE = "b0101011".U(7.W)
+  val READ  = "b0001011".U(7.W) // custom 0
+  val WRITE = "b0101011".U(7.W) // custom 1
 }

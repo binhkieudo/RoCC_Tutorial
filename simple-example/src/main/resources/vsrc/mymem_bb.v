@@ -1,4 +1,4 @@
-module mymem (
+module mymem_bb (
     input           clock,
     input           rqvalid,
     input           wren,

@@ -1,4 +1,4 @@
-package myrocc
+package tut_1
 
 import chisel3._
 import chisel3.util.HasBlackBoxResource
@@ -17,19 +17,21 @@ class mymemIO (xLen: Int = 64)(implicit p: Parameters) extends Bundle {
   val rddata  = Output(UInt(xLen.W))
 }
 
-class myrocc_bb (xLen: Int = 64)(implicit p: Parameters) extends BlackBox with HasBlackBoxResource {
+class mymem_bb (xLen: Int = 64)(implicit p: Parameters) extends BlackBox with HasBlackBoxResource {
   val io = IO(new mymemIO(xLen))
 
-  addResource("/vsrc/mymem.v")
+  addResource("/vsrc/mymem_bb.v")
 }
 
-class myroccAccel (opcodes: OpcodeSet)(implicit p: Parameters) extends LazyRoCC (
+class MyRoccAccel (opcodes: OpcodeSet)(implicit p: Parameters) extends LazyRoCC (
   opcodes   = opcodes,
-  nPTWPorts = 0) {
-  override lazy val module = new myroccAccelImp(this)
+  nPTWPorts = 0,
+  usesFPU   = false,
+  roccCSRs  = Nil) {
+  override lazy val module = new MyRoccAccelImp(this)
 }
 
-class myroccAccelImp(outer: myroccAccel)(implicit p: Parameters) extends LazyRoCCModuleImp(outer) {
+class MyRoccAccelImp(outer: MyRoccAccel)(implicit p: Parameters) extends LazyRoCCModuleImp(outer) {
   val xLen = 64
 
   // Instantiate the rocc modules
@@ -37,13 +39,16 @@ class myroccAccelImp(outer: myroccAccel)(implicit p: Parameters) extends LazyRoC
 
   val myroccController = Module(new RoCCController(xLen))
 
-  val myroccBlackBox   = Module(new myrocc_bb(xLen))
+  val myroccBlackBox   = Module(new mymem_bb(xLen))
 
   // Connect
   io <> myroccDecoupler.io.rocc_io
+  myroccDecoupler.io.clock := clock
+  myroccDecoupler.io.reset := reset.asUInt
 
-  myroccDecoupler.io.controller_io <> myroccController.io
+  myroccController.io.decoupler_io <> myroccDecoupler.io.controller_io
+  myroccController.io.clock := clock
+  myroccController.io.reset := reset.asUInt
 
   myroccController.io.bb_io <> myroccBlackBox.io
-
 }
