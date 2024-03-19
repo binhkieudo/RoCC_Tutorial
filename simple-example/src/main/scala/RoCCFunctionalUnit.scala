@@ -10,10 +10,12 @@ import org.chipsalliance.cde.config.Parameters
 class mymemIO (xLen: Int = 64)(implicit p: Parameters) extends Bundle {
   val clock   = Input(Clock())
   val rqvalid = Input(Bool())
+  val rqaddr  = Input(UInt(5.W))
   val wren    = Input(Bool())
   val addr    = Input(UInt(10.W))
   val wrdata  = Input(UInt(xLen.W))
   val rdvalid = Output(Bool())
+  val rdaddr  = Output(UInt(5.W))
   val rddata  = Output(UInt(xLen.W))
 }
 

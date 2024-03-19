@@ -1,6 +1,7 @@
 package tut_1
 
 import chisel3._
+import chisel3.util.RegEnable
 import org.chipsalliance.cde.config.Parameters
 
 class ControllerDecouplerIO (xLen: Int = 64)(implicit p: Parameters) extends Bundle {
@@ -36,12 +37,13 @@ class RoCCController (xLen: Int = 64)(implicit p: Parameters) extends Module {
   // Process signals from Decoupler
   io.bb_io.clock    := io.clock
   io.bb_io.rqvalid  := io.decoupler_io.rocc_req_valid
+  io.bb_io.rqaddr   := io.decoupler_io.rocc_req_rd
   io.bb_io.wren     := (io.decoupler_io.rocc_req_cmd === ISA.WRITE)
   io.bb_io.addr     := io.decoupler_io.rocc_req_addr
   io.bb_io.wrdata   := io.decoupler_io.rocc_req_wrdata
   io.decoupler_io.rocc_req_ready := true.B
 
-  io.decoupler_io.rocc_resp_rd    := io.decoupler_io.rocc_req_rd
+  io.decoupler_io.rocc_resp_rd    := io.bb_io.rdaddr
   io.decoupler_io.rocc_resp_data  := io.bb_io.rddata
   io.decoupler_io.rocc_resp_valid := io.bb_io.rdvalid
 }
