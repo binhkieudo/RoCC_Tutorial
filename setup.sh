@@ -6,6 +6,8 @@ ORIGDIR=./orig
 ORIGFILE=$ORIGDIR/build.sbt
 TMPFILE=./build.sbt
 
+CONFIGDIR=../chipyard/src/main/scala/config/
+
 # Backup the original file
 mkdir -p $ORIGDIR
 cp -rn $ROOTFILE $ORIGFILE
@@ -29,6 +31,7 @@ function setup_tut1
         cat ./simple-example/script >> ./tmp.sbt
         cat ./tmp.sbt > $TMPFILE
         rm -f ./tmp.sbt
+        cp ./simple-example/RoCCTutorialConfig $CONFIGDIR/RoCCTutorialConfig.scala
     fi
 }
 
