@@ -1,8 +1,6 @@
 package chipyard
 
 import org.chipsalliance.cde.config.{Config}
-import freechips.rocketchip.diplomacy.{AsynchronousCrossing}
-import freechips.rocketchip.subsystem.{InCluster}
 
 class Tutorial1RocketConfig extends Config(
   new tut_1.WithTut01RoccAccel ++
